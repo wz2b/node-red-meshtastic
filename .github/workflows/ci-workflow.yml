@@ -1,0 +1,43 @@
+name: CI Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # manually trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🟢 Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  # or whatever version you're using
+          cache: 'npm'
+
+      - name: 📦 Install dependencies (workspace-aware)
+        run: npm install
+
+      - name: 🛠 Build all packages
+        run: npm run build
+
+      - name: 📦 Pack all packages
+        run: npm run pack
+
+      - name: 💾 Upload meshtastic-protobuf-core artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wz2b-meshtastic-protobuf-core.tgz
+          path: wz2b-meshtastic-protobuf-core*.tgz
+
+      - name: 💾 Upload node-red-meshtastic-protobuf artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wz2b-node-red-meshtastic-protobuf.tgz
+          path: wz2b-node-red-meshtastic-protobuf*.tgz

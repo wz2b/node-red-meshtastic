@@ -1,0 +1,25 @@
+<script type="text/javascript">
+    RED.nodes.registerType('meshtastic-unpack', {
+        category: 'meshtastic',
+        defaults: {
+            name: { value: "" }
+        },
+        label: function () {
+            return this.name || "meshtastic-unpack";
+        },
+        inputs: 1,
+        outputs: 1
+    });
+</script>
+
+<!-- edit template -->
+<script type="text/html" data-template-name="meshtastic-unpack">
+    <div class="form-row">
+        <span>This is your node's configuration page</span>
+    </div>
+</script>
+
+<!-- help text -->
+<script type="text/markdown" data-help-name="meshtastic-unpack">
+    This is your node's help text.
+</script>

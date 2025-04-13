@@ -1,0 +1,88 @@
+<script type="text/javascript">
+    RED.nodes.registerType("meshtastic-encryption-config", {
+        category: 'config',
+        defaults: {
+            name: { value: "" },
+            keys: { value: [] } // Stored as JSON
+        },
+        label: function () {
+            return this.name || "meshtastic-encryption-config";
+        },
+        oneditprepare: function () {
+            const keyList = $("#meshtastic-encryption-keys");
+            const warning = $("#no-keys-warning");
+
+            function updateWarningVisibility() {
+                if (keyList.children("li").length === 0) {
+                    warning.show();
+                } else {
+                    warning.hide();
+                }
+            }
+
+            function renderKeyItem(channel = "", psk = "") {
+                const li = $('<li/>').addClass("form-row");
+                li.append(`<input type="number" class="key-channel" placeholder="Channel" style="width:80px" value="${channel}">`);
+                li.append(`<input type="text" class="key-psk" placeholder="PSK (base64)" style="width:200px" value="${psk}">`);
+                li.append('<button class="remove-key red-ui-button red-ui-button-small"><i class="fa fa-trash"></i></button>');
+                keyList.append(li);
+                updateWarningVisibility();
+            }
+
+            // Load from config
+            const existing = this.keys || [];
+            existing.forEach((key) => renderKeyItem(key.channel, key.psk));
+            updateWarningVisibility();
+
+            // Add Key
+            $("#add-key").on("click", function (e) {
+                e.preventDefault();
+                renderKeyItem();
+            });
+
+            // Remove Key
+            keyList.on("click", ".remove-key", function () {
+                $(this).closest("li").remove();
+                updateWarningVisibility();
+            });
+        },
+
+        oneditsave: function () {
+            const keys = [];
+            $("#meshtastic-encryption-keys li").each(function () {
+                const channel = parseInt($(this).find(".key-channel").val());
+                const psk = $(this).find(".key-psk").val();
+                if (!isNaN(channel) && psk) {
+                    keys.push({ channel, psk });
+                }
+            });
+            this.keys = keys;
+        }
+
+    });
+</script>
+
+
+<!-- edit template -->
+<script type="text/html" data-template-name="meshtastic-encryption-config">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label><i class="fa fa-key"></i> Encryption Keys</label>
+        <ol id="meshtastic-encryption-keys" style="list-style-type: none; padding-left: 0;"></ol>
+        <div id="no-keys-warning" style="color: #888; margin-top: 5px;">
+            No encryption keys defined. Default PSK <code>AQ==</code> will be used for channel 0.
+        </div>
+        <button id="add-key" class="red-ui-button red-ui-button-small"><i class="fa fa-plus"></i> Add Key</button>
+    </div>
+
+</script>
+
+<!-- help text -->
+<script type="text/markdown" data-help-name="eshtastic-encryption-config">
+    This is your node's help text.
+</script>
+

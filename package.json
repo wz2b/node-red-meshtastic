@@ -1,0 +1,14 @@
+{
+  "name": "meshtastic-node-red",
+  "private": true,
+  "workspaces": [
+    "packages/@wz2b/node-red-meshtastic"
+  ],
+  "scripts": {
+    "build": "npm run build -w @wz2b/node-red-meshtastic",
+    "generate": "npm run generate -w @wz2b/node-red-meshtastic",
+    "test": "npm run test -w @wz2b/node-red-meshtastic",
+    "pack": "npm pack -w @wz2b/node-red-meshtastic",
+    "start": "node $NODE_OPTIONS node_modules/node-red/red.js $FLOWS"
+  }
+}

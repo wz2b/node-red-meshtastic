@@ -1,0 +1,63 @@
+<script type="text/javascript">
+    RED.nodes.registerType('meshtastic-wrap-protobuf', {
+        category: 'meshtastic',
+        defaults: {
+            name: { value: "" }
+        },
+        label: function () {
+            return this.name || "meshtastic-wrap-protobuf";
+        },
+        inputs: 1,
+        outputs: 1
+    });
+</script>
+
+<!-- edit template -->
+<script type="text/html" data-template-name="meshtastic-wrap-protobuf">
+    <div class="form-row">
+        <span>This is your node's configuration page</span>
+    </div>
+    <div class="form-row">
+        <label for="node-input-packetType"><i class="fa fa-wrench"></i> Packet Type</label>
+        <select id="node-input-packetType" style="width: 100%;">
+            <option value="ToRadio">ToRadio (serial/tcp/udp)</option>
+            <option value="ServiceEnvelope">ServiceEnvelope (mqtt)</option>
+        </select>
+    </div>
+</script>
+
+
+<!-- help text -->
+<script type="text/markdown" data-help-name="meshtastic-wrap-protobuf">
+    # Wrap Protobuf
+    The purpose of this node is to wrap a meshtastic protobuf
+    message to be able to send it to the meshtastic node.  The type
+    of wrapping depends on the channel:
+
+    - ToRadio: The message is wrapped in a ToRadio protobuf message.  This
+        is the default channel for serial, tcp, and udp connections.
+    - ServiceEnvelope: The message is wrapped in a ServiceEnvelope protobuf message.  This
+        is the default channel for mqtt connections.
+
+
+    ## ToRadio packets must include one of the following:
+
+    - packet (value is a MeshPacket)
+    - disconnect (value is a boolean)
+    - xmodemPacket (value is an Xmodem type)
+    - mqttClientProxyMessage (value is a MqttClientProxyMessage type)
+    - heartbeat (value is a Heartbeat type which is empty)
+    - wantConfigId (value is number)
+
+    ## ServiceEnvelope must contain all the following:
+
+    | Field     | Type       | Description                           |
+    | --------- | ---------- | ------------------------------------- |
+    | packet    | MeshPacket | packet to wrap                        |
+    | channelId | string     | Channel ID as a string                |
+    | gatewayId | string     | Gateway ID (full node ID) as a string |
+
+
+
+
+</script>

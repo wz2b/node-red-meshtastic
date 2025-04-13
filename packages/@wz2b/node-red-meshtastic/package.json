@@ -1,0 +1,56 @@
+{
+  "name": "@wz2b/node-red-meshtastic",
+  "version": "1.0.0",
+  "description": "Meshtastic protobuf message parser and generator for Node-RED",
+  "main": "index.js",
+  "scripts": {
+    "start": "node $NODE_OPTIONS node_modules/node-red/red.js $FLOWS",
+    "generate": "buf generate buf.build/meshtastic/protobufs:v2.6.5",
+    "build": "tsc && npm run copy_html && npm pack",
+    "copy_html": "copyfiles -u 1 \"./src/**/*.html\" ./dist",
+    "clean": "rm -rf ./dist",
+    "test": "mocha --recursive --require ts-node/register test/*.ts --reporter mocha-junit-reporter --reporter-options mochaFile=coverage/junit.xml"
+  },
+  "author": "Christopher Piggott",
+  "license": "GPLv3",
+  "dependencies": {
+    "serialport": "^12.0.0"
+  },
+  "devDependencies": {
+    "@bufbuild/buf": "^1.50.1",
+    "@bufbuild/protobuf": "^2.2.5",
+    "@bufbuild/protoc-gen-es": "^2.2.5",
+    "@types/chai": "^5.2.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.13",
+    "@types/node-red": "^1.3.5",
+    "chai": "^5.2.0",
+    "copyfiles": "^2.4.1",
+    "mocha": "^11.1.0",
+    "mocha-junit-reporter": "^2.2.1",
+    "node-red": "^4.0.9",
+    "node-red-node-test-helper": "^0.3.4",
+    "should": "^13.2.3",
+    "sinon": "^20.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "keywords": [
+    "node-red",
+    "meshtastic"
+  ],
+  "node-red": {
+    "nodes": {
+      "meshtastic-serial-nodes": "dist/nodes/meshtastic-serial/meshtastic-serial.js",
+
+      "meshtastic-unpack": "dist/nodes/unpack/unpack.js",
+      "meshtastic-parse-envelope": "dist/nodes/parse-envelope/parse-envelope.js",
+      "mestastic-decrypt-payload": "dist/nodes/decrypt-payload/decrypt-payload.js",
+      "mestastic-encryption-config": "dist/nodes/encrypt-config/encrypt-config.js",
+      "mestastic-parse-app": "dist/nodes/parse-app/parse-app.js",
+      "meshtastic-wrap-protobuf": "dist/nodes/wrap-protobuf/wrap-protobuf.js",
+
+      "meshtastic-catch": "dist/nodes/meshtastic-catch/meshtastic-catch.js"
+    }
+  }
+}

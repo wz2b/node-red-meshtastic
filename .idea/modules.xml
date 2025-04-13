@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/node-red-meshtastic.iml" filepath="$PROJECT_DIR$/.idea/node-red-meshtastic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../meshtastic-protobufs-ts/.idea/node-red-meshtastic-protobuf.iml" filepath="$PROJECT_DIR$/../../meshtastic-protobufs-ts/.idea/node-red-meshtastic-protobuf.iml" />
+    </modules>
+  </component>
+</project>

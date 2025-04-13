@@ -1,0 +1,104 @@
+<script type="text/javascript">
+    RED.nodes.registerType("meshtastic-serial-port", {
+        category: 'config',
+        defaults: {
+            name: {value: ""},
+            port: {value: "/dev/ttyUSB0", required: true},
+            baudRate: {value: 9600, required: true}
+        },
+        label: function () {
+            return this.name || "meshtastic-serial-port";
+        },oneditprepare: function () {
+            const currentValue = this.port;
+
+            $.getJSON("meshtastic/serialports", function (ports) {
+                const select = $("#node-config-input-port");
+                select.empty();
+
+                ports.forEach(port => {
+                    const label = port.manufacturer
+                        ? `${port.path} (${port.manufacturer})`
+                        : port.vendorId && port.productId
+                            ? `${port.path} (VID: ${port.vendorId}, PID: ${port.productId})`
+                            : `${port.path}`;
+
+                    const option = $("<option></option>")
+                        .attr("value", port.path)
+                        .text(label);
+
+                    if (port.path === currentValue) {
+                        option.attr("selected", "selected");
+                    }
+
+                    select.append(option);
+                });
+            });
+        }
+    });
+</script>
+
+
+<!-- edit template -->
+<script type="text/html" data-template-name="meshtastic-serial-port">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-port"><i class="fa fa-plug"></i> Port</label>
+        <select id="node-config-input-port"></select>
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-baudRate"><i class="fa fa-exchange"></i> Baud Rate</label>
+        <select id="node-config-input-baudRate">
+            <option value="1200">1200</option>
+            <option value="2400">2400</option>
+            <option value="4800">4800</option>
+            <option value="9600">9600</option>
+            <option value="19200">19200</option>
+            <option value="57600">57600</option>
+            <option value="115200">115200</option>
+        </select>
+    </div>
+</script>
+
+<!-- help text -->
+<script type="text/markdown" data-help-name="meshtastic-serial-port">
+    This is your node's help text.
+</script>
+
+
+<script type="text/javascript">
+    RED.nodes.registerType("meshtastic-serial-in", {
+        category: 'meshtastic',
+        defaults: {
+            name: { value: "" },
+            serialConfig: { type: "meshtastic-serial-port", required: true }
+        },
+        label: function () {
+            return this.name || "meshtastic-serial-in";
+        },
+        inputs: 0,
+        outputs: 2
+    });
+</script>
+
+<!-- edit template -->
+<script type="text/html" data-template-name="meshtastic-serial-in">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-serialConfig"><i class="fa fa-cogs"></i> Serial Config</label>
+        <input type="hidden" id="node-input-serialConfig">
+    </div>
+</script>
+
+
+<!-- help text -->
+<script type="text/markdown" data-help-name="meshtastic-serial-in">
+    This is your node's help text.
+</script>
+

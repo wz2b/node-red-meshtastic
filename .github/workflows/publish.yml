@@ -1,0 +1,38 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'   # Matches v1.0.0, v2.1.5, etc
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v3
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: 🛠 Build and pack
+        run: npm run build
+
+      - name: 🚀 Publish core library
+        working-directory: packages/@wz2b/meshtastic-protobuf-core
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: 🚀 Publish Node-RED module
+        working-directory: packages/@wz2b/node-red-meshtastic-protobuf
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

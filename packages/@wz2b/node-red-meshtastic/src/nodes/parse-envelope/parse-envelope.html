@@ -1,0 +1,27 @@
+<script type="text/javascript">
+    RED.nodes.registerType('meshtastic-parse-envelope', {
+        category: 'meshtastic',
+        defaults: {
+            name: { value: "" }
+        },
+        label: function () {
+            return this.name || "meshtastic-parse-envelope";
+        },
+        inputs: 1,
+        outputs: 1
+    });
+</script>
+
+<!-- edit template -->
+<script type="text/html" data-template-name="meshtastic-parse-envelope">
+    <div class="form-row">
+        <span>This is your node's configuration page</span>
+    </div>
+</script>
+
+<!-- help text -->
+<script type="text/markdown" data-help-name="meshtastic-parse-envelope">
+    Quick note about channel numbers: for historical and backward compatibility reasons,
+    what appears as channel 8 on the mqtt stream is actually channel 0.  This
+    node replaces that back to 0 to make it less confusing for users of this node.
+</script>

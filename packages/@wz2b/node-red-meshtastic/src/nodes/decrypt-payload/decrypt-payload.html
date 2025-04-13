@@ -1,0 +1,34 @@
+<script type="text/javascript">
+    RED.nodes.registerType('meshtastic-decrypt-payload', {
+        category: 'meshtastic',
+        defaults: {
+            name: { value: "" },
+            encryption: { value: "", type: "meshtastic-encryption-config" }  // 👈 this is the fix
+        },
+        label: function () {
+            return this.name || "meshtastic-decrypt-payload";
+        },
+        icon: "lock.png",
+        inputs: 1,
+        outputs: 2
+    });
+</script>
+
+<!-- edit template -->
+<script type="text/html" data-template-name="meshtastic-decrypt-payload">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-encryption"><i class="fa fa-lock"></i> Encryption Config</label>
+        <select id="node-input-encryption"></select>
+    </div>
+</script>
+
+
+<!-- help text -->
+<script type="text/markdown" data-help-name="meshtastic-decrypt-payload">
+    This is your node's help text.
+</script>
