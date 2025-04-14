@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node $NODE_OPTIONS node_modules/node-red/red.js $FLOWS",
-    "generate": "buf generate buf.build/meshtastic/protobufs:v2.6.5",
+    "generate": "buf generate buf.build/meshtastic/protobufs:v2.5.5",
     "build": "tsc && npm run copy_html && npm pack",
     "copy_html": "copyfiles -u 1 \"./src/**/*.html\" ./dist",
     "clean": "rm -rf ./dist",
