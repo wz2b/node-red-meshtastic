@@ -3,7 +3,7 @@
         category: 'meshtastic',
         defaults: {
             name: { value: "" },
-            encryption: { value: "", type: "meshtastic-encryption-config" }  // 👈 this is the fix
+            encryption: { value: "", type: "meshtastic-encryption-config", required: false }  // 👈 this is the fix
         },
         label: function () {
             return this.name || "meshtastic-decrypt-payload";

@@ -5,6 +5,8 @@ import {decryptMeshtastic} from "../../common/decrypt";
 import {fromBinary} from "@bufbuild/protobuf";
 import {FromRadio, MeshPacket, DataSchema} from "../../generated/meshtastic/mesh_pb";
 import {Node as NodeRedNode} from 'node-red';
+import {MestasticEncryptionOptionsNodeDef} from "../encrypt-config/types";
+import {MeshtasticEncryptionOptionsNode} from "../encrypt-config/encrypt-config";
 
 export const DEFAULT_PUBLIC_KEY = "1PG7OiApB1nwvP+rz05pAQ==";
 
@@ -12,9 +14,14 @@ class DecryptPayloadNode extends NRTSNode<DecryptPayloadNodeDef> {
     private not_encrypted = 0;
     private good = 0;
     private total = 0;
+    private configNode: MeshtasticEncryptionOptionsNode | undefined;
 
     constructor(RED: NodeAPI, node: NodeRedNode, config: DecryptPayloadNodeDef) {
         super(RED, node, config);
+
+        if(config.encryption && config.encryption !== "") {
+            this.configNode = super.getNodeTyped<MeshtasticEncryptionOptionsNode>(config.encryption)
+        }
     }
 
     protected override onInput(
@@ -42,7 +49,11 @@ class DecryptPayloadNode extends NRTSNode<DecryptPayloadNodeDef> {
 
         const encrypted = packet.payloadVariant.value as Uint8Array;
         const data = Buffer.from(encrypted);
-        const key = Buffer.from(DEFAULT_PUBLIC_KEY, "base64");
+
+        let key = this.configNode?.getPskForChannel(packet.channel);
+        if (!key) {
+            key = DEFAULT_PUBLIC_KEY;
+        }
 
         try {
             const decryptedBuffer = decryptMeshtastic(packet.from, packet.id, data, key);
@@ -77,7 +88,7 @@ class DecryptPayloadNode extends NRTSNode<DecryptPayloadNodeDef> {
     }
 
     private updateCountStatus() {
-        const bad = this.total = this.good - this.not_encrypted;
+        const bad = this.total - this.good - this.not_encrypted;
         this.status(`D:${this.good} F:${bad} U:${this.not_encrypted} T:${this.total}`);    }
 }
 

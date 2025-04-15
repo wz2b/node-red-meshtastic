@@ -2,7 +2,7 @@ import {NRTSNode} from "../../common/NRTSNode";
 import {Node as NodeRedNode, NodeAPI} from "node-red";
 import {MestasticEncryptionOptionsNodeDef} from "./types";
 
-class MeshtasticEncryptionOptionsNode extends NRTSNode<MestasticEncryptionOptionsNodeDef> {
+export class MeshtasticEncryptionOptionsNode extends NRTSNode<MestasticEncryptionOptionsNodeDef> {
     constructor(RED: NodeAPI, node: NodeRedNode, config: MestasticEncryptionOptionsNodeDef) {
         super(RED, node, config);
 
