@@ -50,11 +50,9 @@ class DecryptPayloadNode extends NRTSNode<DecryptPayloadNodeDef> {
         const encrypted = packet.payloadVariant.value as Uint8Array;
         const data = Buffer.from(encrypted);
 
-        let key = this.configNode?.getPskForChannel(packet.channel);
-        if (!key) {
-            key = DEFAULT_PUBLIC_KEY;
-        }
-
+        const keyString = this.configNode?.getPskForChannel(packet.channel) || DEFAULT_PUBLIC_KEY;
+        const key = Buffer.from(keyString, "base64");
+        
         try {
             const decryptedBuffer = decryptMeshtastic(packet.from, packet.id, data, key);
             const decoded = fromBinary(DataSchema, decryptedBuffer);
