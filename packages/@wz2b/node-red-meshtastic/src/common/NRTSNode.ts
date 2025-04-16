@@ -38,7 +38,7 @@ export abstract class NRTSNode<TConfig extends NodeDef = NodeDef> {
      * the send, error, and status messages in case any of our subclasses
      * want to call those.
      */
-    protected send(msg?: NodeMessage | NodeMessage[]): void {
+    protected sendOne(msg?: NodeMessage | NodeMessage[]): void {
         this.node.send(msg);
     }
 
@@ -69,8 +69,8 @@ export abstract class NRTSNode<TConfig extends NodeDef = NodeDef> {
         };
 
         for (const instance of NRTSNode.typedInstances.values()) {
-            if (typeof instance.send === "function" && instance.node?.type === "meshtastic-catch") {
-                instance.send(msg);
+            if (typeof instance.sendOne === "function" && instance.node?.type === "meshtastic-catch") {
+                instance.sendOne(msg);
             }
         }
     }

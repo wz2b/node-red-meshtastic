@@ -96,14 +96,11 @@ class MeshtasticSerialPortNode extends NRTSNode<MestasticSerialPortNodeDef> {
             try {
                 const decoded = fromBinary(FromRadioSchema, result);
 
-                const json = toJson(FromRadioSchema, decoded, {
-                    alwaysEmitImplicit: true,
-                    useProtoFieldName: true,
-                    enumAsInteger: false
-                });
-                const msg: NodeMessage = {payload: json};
-
                 const oneofCase = decoded.payloadVariant.case; // e.g. "packet", "myInfo", etc.
+
+                const msg: NodeMessage = {
+                    payload: decoded // NOT JSON
+                };
 
                 for (const listener of this.dataListeners) {
                     listener.fromRadioIn({
@@ -116,7 +113,6 @@ class MeshtasticSerialPortNode extends NRTSNode<MestasticSerialPortNodeDef> {
             }
         }
     }
-
 
     protected override onClose(removed: boolean, done: (err?: Error) => void): void {
         try {
